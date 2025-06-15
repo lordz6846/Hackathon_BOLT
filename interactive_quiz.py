@@ -1,9 +1,10 @@
-import streamlit as st
+import os
+from dotenv import load_dotenv
 from openai import OpenAI
-import json
 
-# 🔑 API Key
-client = OpenAI(api_key="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")
+load_dotenv()  # โหลดค่าจาก .env
+api_key = os.getenv("OPENAI_API_KEY")  # ดึงค่าจากตัวแปรสิ่งแวดล้อม
+client = OpenAI(api_key=api_key)
 
 # หัวข้อวิชา
 subject_map = {
