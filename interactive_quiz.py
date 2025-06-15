@@ -26,7 +26,7 @@ topic = st.selectbox("Select a topic", subject_map[subject])
 
 # Generate Quiz button
 if st.button("✨ Generate Quiz"):
-    with st.spinner("Generating summary and questions..."):
+    with st.spinner("Generating summary and questions... Please WAIT"):
 
         # 🔹 Generate summary
         summary_prompt = f"Summarize the topic '{topic}' in simple English for lower secondary school students in no more than 6 lines."
