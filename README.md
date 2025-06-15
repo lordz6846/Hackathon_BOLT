@@ -27,29 +27,28 @@ This is a Streamlit-based web app that generates science quizzes for lower secon
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/quizme.git
-cd quizme
+git clone https://github.com/lordz6846/Hackathon_BOLT.git
+cd Hackathon_BOLT
 
-# 2. Create a .env file with your OpenAI key
+# 2. Create a .env file with your OpenAI API key
 echo "OPENAI_API_KEY=your-openai-api-key-here" > .env
 
-# 3. Install dependencies
+# 3. (Optional) Create virtual environment
+python -m venv venv
+source venv/bin/activate      # On macOS/Linux
+venv\Scripts\activate         # On Windows
+
+# 4. Install dependencies
 pip install -r requirements.txt
 
-# 4. Run the app
+# 5. Run the app
 streamlit run app.py
 ```
 
 > Replace `app.py` with your actual filename if it's different.
+> ⚠️ Make sure `.env` is in the **root directory** and contains your OpenAI key.<br>
+> 🧠 Do **not** share your API key publicly!
 
 ---
-
-## 📷 Screenshot
-
-_(Insert screenshot here if needed)_
-
----
-
-## 🧠 Created by [Your Name]
 
 Feel free to fork, use, or contribute to this project!
