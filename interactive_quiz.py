@@ -1,73 +1,83 @@
+import streamlit as st
+from openai import OpenAI
+import json
 import os
 from dotenv import load_dotenv
-from openai import OpenAI
 
-load_dotenv()  # โหลดค่าจาก .env
-api_key = os.getenv("OPENAI_API_KEY")  # ดึงค่าจากตัวแปรสิ่งแวดล้อม
+# 🔑 Load API Key from .env file
+load_dotenv()
+api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key)
 
-# หัวข้อวิชา
+# Subject and Topic Map (English)
 subject_map = {
-    "ฟิสิกส์": ["แรง", "แสง", "เสียง", "พลังงาน", "ไฟฟ้า"],
-    "ชีววิทยา": ["เซลล์ของสิ่งมีชีวิต", "การสังเคราะห์ด้วยแสง", "ระบบหายใจ", "ระบบขับถ่าย", "พันธุกรรม"],
-    "เคมี": ["สมบัติของสาร", "การเปลี่ยนแปลงทางเคมี", "กรด-เบส", "สารละลาย"],
-    "ดาราศาสตร์": ["ระบบสุริยะ", "วัฏจักรของดวงจันทร์", "จักรวาลเบื้องต้น"],
-    "โลกและสิ่งแวดล้อม": ["การเปลี่ยนแปลงของโลก", "ทรัพยากรธรรมชาติ", "สิ่งมีชีวิตกับสิ่งแวดล้อม"]
+    "Physics": ["Force", "Light", "Sound", "Energy", "Electricity"],
+    "Biology": ["Cells of living things", "Photosynthesis", "Respiratory system", "Excretory system", "Genetics"],
+    "Chemistry": ["Properties of substances", "Chemical changes", "Acids and bases", "Solutions"],
+    "Astronomy": ["Solar system", "Moon cycle", "Introduction to the universe"],
+    "Earth and Environment": ["Earth changes", "Natural resources", "Living things and the environment"]
 }
 
-st.title("🧪 QUIZ ME if you CAN ")
+st.title("❓QUIZ ME if you CAN 😎")
 
-# เลือกวิชาและหัวข้อ
-subject = st.selectbox("เลือกหมวดวิชา", list(subject_map.keys()))
-topic = st.selectbox("เลือกหัวข้อ", subject_map[subject])
+# Select subject and topic
+subject = st.selectbox("Select a subject", list(subject_map.keys()))
+topic = st.selectbox("Select a topic", subject_map[subject])
 
-# ปุ่มสร้างแบบทดสอบ
-if st.button("✨ สร้างแบบทดสอบ"):
-    with st.spinner("กำลังสร้างเนื้อหาและคำถาม..."):
+# Generate Quiz button
+if st.button("✨ Generate Quiz"):
+    with st.spinner("Generating summary and questions..."):
 
-        # 🔹 สรุปเนื้อหา
-        summary_prompt = f"สรุปเนื้อหาหัวข้อ '{topic}' สำหรับนักเรียนมัธยมต้น ให้เข้าใจง่าย ไม่เกิน 6 บรรทัด"
+        # 🔹 Generate summary
+        summary_prompt = f"Summarize the topic '{topic}' in simple English for lower secondary school students in no more than 6 lines."
         summary_response = client.chat.completions.create(
             model="gpt-4",
             messages=[{"role": "user", "content": summary_prompt}]
         )
         st.session_state["summary_text"] = summary_response.choices[0].message.content.strip()
 
-        # 🔹 สร้างคำถาม
+        # 🔹 Generate quiz
         quiz_prompt = f"""
-        สร้างคำถามปรนัย 10 ข้อเกี่ยวกับหัวข้อ "{topic}" สำหรับนักเรียนมัธยมต้น
-        แต่ละข้อมีคำถาม, ตัวเลือก 4 ข้อ, และคำตอบที่ถูกต้อง
-        ส่งมาในรูปแบบ JSON ล้วน ๆ ห้ามมีคำอธิบาย ข้อความ หรือคำเกริ่นใด ๆ ทั้งก่อนและหลัง JSON:
-        [
-            {{
-                "question": "...",
-                "options": ["...", "...", "...", "..."],
-                "answer": "..."
-            }},
-            ...
-        ]
-        ย้ำอีกที ตอบมาเป็น JSON ล้วนๆเท่านั้น เท่านั้นเท่านั้นเท่่านั้น
-        """
+Topic: "{topic}"
+Generate 10 multiple choice questions for lower secondary school students.
+Each question should include:
+- A clear question
+- 4 answer choices
+- One correct answer
+
+Output ONLY JSON (no descriptions, no headings). Format:
+[
+  {{
+    "question": "....",
+    "options": ["A", "B", "C", "D"],
+    "answer": "...."
+  }},
+  ...
+]
+"""
         quiz_response = client.chat.completions.create(
             model="gpt-4",
             messages=[{"role": "user", "content": quiz_prompt}]
         )
 
+        raw = quiz_response.choices[0].message.content.strip()
         try:
-            st.session_state["quiz_data"] = json.loads(quiz_response.choices[0].message.content)
-        except:
-            st.error("❌ แปลงคำถามไม่สำเร็จ ลองกดสร้างใหม่อีกครั้ง")
+            st.session_state["quiz_data"] = json.loads(raw)
+        except Exception as e:
+            st.error("❌ Failed to parse quiz. Please try again.")
+            st.write("📦 GPT Output:", raw)
+            st.write("📛 Error:", e)
             st.stop()
 
-# ✅ แสดงแบบทดสอบ ถ้ามีใน session_state
+# ✅ Display quiz if available
 if "quiz_data" in st.session_state:
     quiz_data = st.session_state["quiz_data"]
     summary_text = st.session_state["summary_text"]
 
-    st.subheader("📘 สรุปเนื้อหา")
+    st.subheader("📘 Summary")
     st.info(summary_text)
 
-    st.subheader("🧪 แบบทดสอบ 10 ข้อ")
+    st.subheader("🧪 10-Question Quiz")
 
     if "user_answers" not in st.session_state:
         st.session_state["user_answers"] = {}
@@ -75,18 +85,18 @@ if "quiz_data" in st.session_state:
     for idx, q in enumerate(quiz_data):
         st.markdown(f"**{idx+1}. {q['question']}**")
         st.session_state["user_answers"][idx] = st.radio(
-            "เลือกคำตอบ",
+            "Choose your answer:",
             q["options"],
             key=f"q{idx}",
             index=q["options"].index(st.session_state["user_answers"].get(idx, q["options"][0]))
         )
 
-    if st.button("✅ ตรวจคำตอบ"):
+    if st.button("✅ Submit Answers"):
         st.session_state["checked"] = True
 
-# ✅ เฉลยและช่องถามเพิ่มเติม
+# ✅ Answer checking and ask AI feature
 if st.session_state.get("checked", False):
-    st.subheader("📝 เฉลยพร้อมถามต่อ")
+    st.subheader("📝 Answer Review and Follow-Up")
     score = 0
     quiz_data = st.session_state["quiz_data"]
     user_answers = st.session_state["user_answers"]
@@ -96,23 +106,23 @@ if st.session_state.get("checked", False):
         is_correct = user_ans == q["answer"]
 
         if is_correct:
-            st.success(f"ข้อ {idx+1}: ✅ ถูกต้อง")
+            st.success(f"Question {idx+1}: ✅ Correct")
         else:
-            st.error(f"ข้อ {idx+1}: ❌ ผิด (คำตอบที่ถูกคือ: {q['answer']})")
+            st.error(f"Question {idx+1}: ❌ Incorrect (Correct answer: {q['answer']})")
 
-        # 💬 ช่องถาม AI
-        with st.expander(f"💬 ถาม AI เพิ่มเติม (ข้อ {idx+1})"):
-            follow_up = st.text_input(f"❓ คำถามเพิ่มเติมสำหรับข้อ {idx+1}", key=f"follow_q{idx}")
-            if st.button(f"ถาม AI ข้อ {idx+1}", key=f"ask_q{idx}"):
+        # 💬 Ask AI section
+        with st.expander(f"💬 Ask AI more about Question {idx+1}"):
+            follow_up = st.text_input(f"❓ Your follow-up question (Q{idx+1})", key=f"follow_q{idx}")
+            if st.button(f"Ask AI (Q{idx+1})", key=f"ask_q{idx}"):
                 full_prompt = f"""
-หัวข้อ: {topic}
-คำถามต้นฉบับ: {q['question']}
-คำตอบที่ถูกต้อง: {q['answer']}
-คำถามเพิ่มเติมจากนักเรียน: {follow_up}
+Topic: {topic}
+Original question: {q['question']}
+Correct answer: {q['answer']}
+Student's follow-up question: {follow_up}
 
-อธิบายให้เข้าใจง่ายแบบนักเรียนมัธยมต้น
+Explain clearly in simple English for a lower secondary school student.
 """
-                with st.spinner("AI กำลังช่วยอธิบาย..."):
+                with st.spinner("AI is explaining..."):
                     response = client.chat.completions.create(
                         model="gpt-4",
                         messages=[{"role": "user", "content": full_prompt}]
@@ -121,5 +131,5 @@ if st.session_state.get("checked", False):
 
         score += int(is_correct)
 
-    st.subheader("📊 คะแนนรวม")
-    st.write(f"คุณตอบถูกทั้งหมด **{score} / 10** ข้อ 🎉")
+    st.subheader("📊 Total Score")
+    st.write(f"You got **{score} / 10** questions correct 🎉")
