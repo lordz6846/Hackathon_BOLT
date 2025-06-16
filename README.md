@@ -65,9 +65,9 @@ This is a Streamlit-based web app that generates science quizzes for lower secon
   streamlit run app.py
   ```
 
-  Replace `app.py` with your actual filename if it's different.<br>
-  Make sure `.env` is in the **root directory** and contains your OpenAI key.<br>
-  ⚠️ Do **not** share your API key publicly!
+  - Replace `app.py` with your actual filename if it's different.<br>
+  - Make sure `.env` is in the **root directory** and contains your OpenAI key.<br>
+  - ⚠️ Do **not** share your API key publicly!
 
 </details>
 
@@ -75,8 +75,8 @@ This is a Streamlit-based web app that generates science quizzes for lower secon
 <details>
 <summary> 🤖 Fun Fact </summary>
 
-  90% of this repo was written by ChatGPT.  
-  I just keep saying “next” — and telling it when things broke. 😅
+  - 90% of this repo was written by ChatGPT.  
+  - I just keep saying “next” — and telling it when things broke. 😅
 
 </details>
 
