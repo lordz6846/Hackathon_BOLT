@@ -12,14 +12,17 @@ That said, please make sure to **pull before pushing**, since I’ve been using 
 **No pressure at all — if you don’t feel like editing, this version should be enough to present at the hackathon. 😊**
 
 ---
-
 ## ✨ Features
 
-- 📘 Simple topic summaries
-- 🧪 Auto-generated 10-question quizzes
-- ✅ Answer checking with immediate feedback
-- 💬 Ask AI more about any question
-- 🚀 Built with Streamlit for quick deployment
+- 📘 Topic summaries with simple language
+- 🧪 AI-generated 10-question quizzes
+- ✅ Instant answer checking with feedback
+- 💬 Ask follow-up questions for each item
+- ⏱ Optional countdown timer
+- 💯 Emoji-based score feedback
+- 🔁 One-click Try Again
+- 🛡 Safe session handling
+- 🚀 Built with Streamlit
 
 ---
 
