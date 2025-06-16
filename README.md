@@ -60,7 +60,7 @@ Make sure `.env` is in the **root directory** and contains your OpenAI key.<br>
 
 ---
 
-Feel free to fork, use, or contribute to this project!
+**Feel free to fork, use, or contribute to this project!**
 
 ---
 ## 🤖 Fun Fact  
