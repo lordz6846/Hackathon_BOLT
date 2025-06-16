@@ -54,9 +54,9 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-> Replace `app.py` with your actual filename if it's different.<br>
-> Make sure `.env` is in the **root directory** and contains your OpenAI key.<br>
-> ⚠️ Do **not** share your API key publicly!
+Replace `app.py` with your actual filename if it's different.<br>
+Make sure `.env` is in the **root directory** and contains your OpenAI key.<br>
+⚠️ Do **not** share your API key publicly!
 
 ---
 
