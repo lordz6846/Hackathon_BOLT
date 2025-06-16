@@ -6,6 +6,7 @@ This is a Streamlit-based web app that generates science quizzes for lower secon
 <details>
 <summary> Note for Teammates </summary>
 
+
 ⚠️ For now, only `interactive_quiz.py` and `interactive_quiz.ipynb` are actually used. Feel free to ignore the rest. It has been mainly developed solo so far (approx. 200 lines of code lol). If you’d like to continue building on top of it, feel free to do so — especially if you want to **redesign the frontend** or **improve the UI for presentation**.
 
 That said, please make sure to **pull before pushing**, since I’ve been using `git push --force` regularly to keep things clean while working in Jupyter.
