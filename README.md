@@ -31,7 +31,7 @@ This is a Streamlit-based web app that generates science quizzes for lower secon
 
 
 <details>
-<summary> 🚀 How to Run </summary>
+<summary> 🚀 How to Run (written for myself in case that I forget lol)</summary>
 
   ```bash
   # 1. Clone the repository
